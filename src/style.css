@@ -1,0 +1,36 @@
+:root * {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.content {
+    width: 200vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    transition: 0.25s ease-in;
+}
+
+.content.pageTwo {
+    margin-left: -100vw;
+}
+
+.cell {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main{
+}
+
+.forecast {
+}
