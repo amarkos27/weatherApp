@@ -1,10 +1,12 @@
 :root * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
 }
 
 body {
-    margin: 0;
-    padding: 0;
+    height: 100vw;
     width: 100vw;
     overflow: hidden;
 }
@@ -14,22 +16,71 @@ body {
     height: 100vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    transition: 0.25s ease-in;
+    transition: margin-left 0.25s ease-in;
 }
 
 .content.pageTwo {
     margin-left: -100vw;
 }
 
-.cell {
-    width: 100%;
-    height: 100%;
+/* HOME PAGE */
+.main {
+    padding: 25px;
+    display: grid;
+    grid-template-rows: 32px 2fr 1fr 3fr;
+    justify-items: center;
+    gap: 25px;
+}
+
+#search {
+    padding: 5px;
+    width: min(80vw, 275px);
+}
+
+.main header {
+    display: grid;
+    grid-template-rows: 1fr 2fr .75fr 1fr;
+    justify-items: center;
+}
+
+.main header * {
+    font-weight: 400;
+    text-align: center;
+}
+
+.location {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.main{
+.temp {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    font-size: 90px;
+}
+
+.temp span {
+    position: absolute;
+    right: 0px; 
+}
+
+.conditions {
+    font-size: 22px;
+}
+
+.high-low-humidity {
+    display: grid;
+    grid-template: 1fr 1fr / 1fr 1fr;
+    gap: 7px;
+}
+
+.humidity {
+    grid-column: 1 / span 2;
 }
 
 .forecast {
