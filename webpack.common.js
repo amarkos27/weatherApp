@@ -28,6 +28,14 @@ module.exports = {
         test: /.(ttf|woff|woff2)$/i,
         type: 'asset/resource',
       },
+      {
+        test: /.(gif|jpeg|jpg|png|svg)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /.html$/i,
+        use: 'html-loader',
+      },
     ],
   },
 };
