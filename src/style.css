@@ -12,6 +12,7 @@
     user-select: none;
     font-family: 'Nunito';
     color: white;
+    transition: opacity .55s;
 }
 
 body {
@@ -33,9 +34,9 @@ body {
     margin-left: -100vw;
 }
 
-.hidden {
-    opacity: 0;
-    transition: 0.75s;
+.chevron {
+    display: inline;
+    width: 30px; 
 }
 
 /* HOME PAGE */
@@ -65,7 +66,7 @@ body {
     font-weight: 700;
 }
 
-#loading {
+.loading {
     width: 75px;
     height: 75px;
     fill: white;
@@ -73,13 +74,13 @@ body {
     animation: 1s loadAnimation infinite linear;
 }
 
-.main header {
+.header {
     display: grid;
     grid-template-rows: 1fr 2fr .75fr 1fr;
     justify-items: center;
 }
 
-.main header * {
+.header * {
     font-weight: 400;
     text-align: center;
 }
@@ -137,9 +138,36 @@ body {
 
 #ten-day {
     align-self: center;
+    appearance: none;
+    border: none;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 10px;
+    font-size: 25px;
+    font-weight: 800;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#ten-day:hover {
+    background: rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+
+#ten-day .chevron {
+    transform: rotate(-90deg);
 }
 
 .forecast {
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.out-of-flow {
+    display: none;
 }
 
 @media only screen and (max-width: 740px) {
