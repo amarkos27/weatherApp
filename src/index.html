@@ -9,18 +9,19 @@
 <body>
     <div class="content">
         <div class="cell main">
-            <input type="text" name="search" id="search" autocomplete="off">
-            <header>
+            <input type="text" name="search" id="search" autocomplete="off" placeholder="Search">
+            <img src="./images/loading-42.svg" alt="loading" id="loading">
+            <header class="hidden">
                 <h1 class="location">Bayside, NY</h1>
-                <h1 class="temp">75 <span>°</span></h1>
+                <h1 class="temp">75°</h1>
                 <p class="conditions">Partly cloudy</p>
                 <div class="high-low-humidity">
                     <p class="high">H: 80°</p>
-                    <p class="low">L: 65°</p>
-                    <p class="humidity">Humidity: 60%</p>
+                    <p class="low">L: 70°</p>
+                    <p class="humidity">Humidity: 65%</p>
                 </div>
             </header>
-            <div class="hourly-conditions">
+            <div class="hourly-conditions hidden">
                 <div class="hour"></div>
                 <div class="hour"></div>
                 <div class="hour"></div>
