@@ -16,13 +16,13 @@
 }
 
 body {
-    height: 100vh; 
+    max-height: fit-content;
     overflow-x: hidden;
 }
 
 .content {
     width: 200vw;
-    height: 100vh;
+    min-height: 100vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
     transition: margin-left 0.25s ease-in;
@@ -41,7 +41,6 @@ body {
 
 /* HOME PAGE */
 .main {
-    height: 100vh;
     padding: 25px;
     display: grid;
     grid-template-rows: 40px 2fr 3fr 1fr;
@@ -71,7 +70,7 @@ body {
     height: 75px;
     fill: white;
     transform: rotate(-90deg);
-    animation: 1s loadAnimation infinite linear;
+    /* animation: 1s loadAnimation infinite linear; */
 }
 
 .header {
@@ -140,23 +139,26 @@ body {
     align-self: center;
     appearance: none;
     border: none;
-    background: rgba(0, 0, 0, 0.15);
-    padding: 10px;
-    font-size: 25px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 12px;
+    font-size: 22px;
     font-weight: 800;
     border-radius: 15px;
+    opacity: 0.7;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: opacity 0s;
 }
 
 #ten-day:hover {
-    background: rgba(0, 0, 0, 0.25);
+    opacity: 1;
     cursor: pointer;
 }
 
 #ten-day .chevron {
     transform: rotate(-90deg);
+    display: none;
 }
 
 .forecast {
@@ -172,7 +174,7 @@ body {
 
 @media only screen and (max-width: 740px) {
     .main {
-        grid-template-rows: 32px 1fr 2fr 1fr;
+        grid-template-rows: 40px 2fr 4fr 1fr;
     }
     .hourly-conditions {
         margin: 0;
