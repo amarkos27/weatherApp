@@ -33,6 +33,8 @@ const Display = (() => {
     chevron,
   };
 
+  function fillMain(data) {}
+
   function listeners() {
     tenDayButton.button.addEventListener('mouseenter', () => {
       tenDayButton.button.appendChild(tenDayButton.chevron);
