@@ -6,6 +6,9 @@ const Display = (() => {
   // 10 day forecast page
   const forecast = document.querySelector('.forecast');
 
+  // Loading icon
+  const loading = document.querySelector('.loading');
+
   // Header of main page that displays current conditions
   const header = {
     container: document.querySelector('.header'),
@@ -33,7 +36,32 @@ const Display = (() => {
     chevron,
   };
 
-  function fillMain(data) {}
+  function loadingOn() {
+    loading.classList.remove('hidden', 'out-of-flow');
+    header.container.classList.add('hidden', 'out-of-flow');
+  }
+
+  function loadingOff() {
+    header.container.classList.remove('hidden', 'out-of-flow');
+    loading.classList.add('hidden', 'out-of-flow');
+  }
+
+  function fillHeader(today, location) {
+    // Omit 'United States' from the location string if present
+    const omitUS = /.*?(?=, United States|$)/.exec(location)[0];
+
+    header.location.textContent = omitUS;
+    header.temp.textContent = `${Math.floor(today.temp)}°`;
+    header.high.textContent = `H: ${Math.floor(today.tempmax)}°`;
+    header.low.textContent = `L: ${Math.floor(today.tempmin)}°`;
+    header.humidity.textContent = `Humidity: ${Math.floor(today.humidity)}%`;
+  }
+
+  function fillMain(data) {
+    const today = data.days[0];
+    const location = data.resolvedAddress;
+    fillHeader(today, location);
+  }
 
   function listeners() {
     tenDayButton.button.addEventListener('mouseenter', () => {
@@ -51,6 +79,9 @@ const Display = (() => {
 
   return {
     init,
+    loadingOn,
+    loadingOff,
+    fillMain,
   };
 })();
 

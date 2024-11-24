@@ -17,11 +17,30 @@ const APP = (() => {
         const weatherData = await response.json();
         return weatherData;
       } else {
-        throw new Error('Query not valid');
+        throw new Error('Not found');
       }
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
+  }
+
+  async function search(query) {
+    try {
+      const weatherData = await getData(query);
+      Display.fillMain(weatherData);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  function loadingWrapper(func) {
+    return async function (param) {
+      Display.loadingOn();
+      const result = await func(param);
+      Display.loadingOff();
+
+      return result;
+    };
   }
 
   function validateQuery(e) {
@@ -49,6 +68,12 @@ const APP = (() => {
       if (!input.validity.valid) {
         input.reportValidity();
       } else {
+        const searchWithLoading = loadingWrapper(search);
+        searchWithLoading(input.value).catch((error) => {
+          input.setCustomValidity(error.message);
+          input.reportValidity();
+        });
+        input.value = '';
       }
     }
   });
