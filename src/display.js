@@ -14,6 +14,7 @@ const Display = (() => {
     container: document.querySelector('.header'),
     location: document.querySelector('.location'),
     temp: document.querySelector('.temp'),
+    conditions: document.querySelector('.conditions'),
     high: document.querySelector('.high'),
     low: document.querySelector('.low'),
     humidity: document.querySelector('.humidity'),
@@ -51,7 +52,8 @@ const Display = (() => {
     const omitUS = /.*?(?=, United States|$)/.exec(location)[0];
 
     header.location.textContent = omitUS;
-    header.temp.textContent = `${Math.floor(today.temp)}°`;
+    header.temp.innerHTML = `${Math.floor(today.temp)} <span>°</span>`;
+    header.conditions.textContent = `${today.conditions}`;
     header.high.textContent = `H: ${Math.floor(today.tempmax)}°`;
     header.low.textContent = `L: ${Math.floor(today.tempmin)}°`;
     header.humidity.textContent = `Humidity: ${Math.floor(today.humidity)}%`;
@@ -67,9 +69,13 @@ const Display = (() => {
     tenDayButton.button.addEventListener('mouseenter', () => {
       tenDayButton.button.appendChild(tenDayButton.chevron);
 
-      tenDayButton.button.addEventListener('mouseleave', () => {
-        tenDayButton.chevron.remove();
-      });
+      tenDayButton.button.addEventListener(
+        'mouseleave',
+        () => {
+          tenDayButton.chevron.remove();
+        },
+        { once: true }
+      );
     });
   }
 
