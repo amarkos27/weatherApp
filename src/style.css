@@ -23,6 +23,7 @@ body {
 .content {
     width: 200vw;
     min-height: 100vh;
+    max-height: 100vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
     transition: margin-left 0.25s ease-in;
@@ -41,6 +42,7 @@ body {
 
 /* HOME PAGE */
 .main {
+    max-height: 100vh;
     padding: 25px;
     display: grid;
     grid-template-rows: 40px 2fr 3fr 1fr;
@@ -92,12 +94,15 @@ body {
 }
 
 .temp {
-    width: 100%;
+    position: relative;
+    width: fit-content;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
     font-size: 90px;
+}
+
+.temp span {
+    position: absolute;
+    right: -30px;
 }
 
 .conditions {
@@ -178,6 +183,10 @@ body {
 }
 
 @media only screen and (max-width: 740px) {
+    .content, .main {
+        max-height: fit-content;
+    }
+
     .main {
         grid-template-rows: 40px 1fr 4fr 1fr;
     }
