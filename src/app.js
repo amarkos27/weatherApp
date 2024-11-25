@@ -1,6 +1,8 @@
 import 'normalize.css';
 import './style.css';
 import { Display } from './display';
+import zipcodes from 'zipcodes';
+import valZip from 'val-zip';
 
 const APP = (() => {
   Display.init();
@@ -27,6 +29,7 @@ const APP = (() => {
   async function search(query) {
     try {
       const weatherData = await getData(query);
+      console.log(weatherData);
       Display.fillMain(weatherData);
     } catch (error) {
       throw error;
@@ -41,6 +44,17 @@ const APP = (() => {
 
       return result;
     };
+  }
+
+  function convertFromZIP(query) {
+    const country = 'US';
+
+    if (valZip(query, country)) {
+      const result = zipcodes.lookup(query);
+      return `${result.city}, ${result.state}`;
+    } else {
+      throw new Error('If entering zip code, must be valid U.S.');
+    }
   }
 
   function validateQuery(e) {
@@ -64,17 +78,23 @@ const APP = (() => {
   const input = document.getElementById('search');
   input.addEventListener('input', validateQuery);
   input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      if (!input.validity.valid) {
-        input.reportValidity();
-      } else {
-        const searchWithLoading = loadingWrapper(search);
-        searchWithLoading(input.value).catch((error) => {
-          input.setCustomValidity(error.message);
+    try {
+      if (e.key === 'Enter') {
+        if (!input.validity.valid) {
           input.reportValidity();
-        });
-        input.value = '';
+        } else {
+          const query = /^\d+$/.test(input.value)
+            ? convertFromZIP(input.value)
+            : input.value;
+
+          const searchWithLoading = loadingWrapper(search);
+          searchWithLoading(query);
+          input.value = '';
+        }
       }
+    } catch (error) {
+      input.setCustomValidity(error.message);
+      input.reportValidity();
     }
   });
 })();
