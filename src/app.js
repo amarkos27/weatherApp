@@ -10,46 +10,40 @@ const APP = (() => {
   const KEY = 'EFACUPEQBZ73J6DUNKPRB2PDZ';
 
   async function getData(query) {
-    try {
-      const response = await fetch(
-        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${query}?key=${KEY}&include=hours`
-      );
+    const response = await fetch(
+      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${query}?key=${KEY}&include=hours`
+    );
 
-      if (response.status === 200) {
-        const weatherData = await response.json();
-        return weatherData;
-      } else {
-        throw new Error('Not found');
-      }
-    } catch (error) {
-      throw error;
+    if (response.status === 200) {
+      const weatherData = await response.json();
+      return weatherData;
+    } else {
+      throw new Error('Not found');
     }
   }
 
   async function search(query) {
-    try {
-      const weatherData = await getData(query);
-      console.log(weatherData);
-      Display.fillMain(weatherData);
-    } catch (error) {
-      throw error;
-    }
+    const weatherData = await getData(query);
+    console.log(weatherData);
+    Display.fillMain(weatherData);
   }
 
   function loadingWrapper(func) {
     return async function (param) {
-      Display.loadingOn();
-      const result = await func(param);
-      Display.loadingOff();
-
-      return result;
+      try {
+        Display.loadingOn();
+        await func(param);
+      } finally {
+        Display.loadingOff();
+      }
     };
   }
 
   function convertFromZIP(query) {
     const country = 'US';
+    const validUSZip = valZip(query, country);
 
-    if (valZip(query, country)) {
+    if (validUSZip) {
       const result = zipcodes.lookup(query);
       return `${result.city}, ${result.state}`;
     } else {
@@ -62,7 +56,7 @@ const APP = (() => {
     if (/^[\s]+$/.test(input.value) || input.value === '') {
       input.setCustomValidity('Cannot be an empty string');
     } else if (!/^[^\s\W]/.test(input.value)) {
-      // Input must not start with a string or special character
+      // Input must not start with a space or special character
       input.setCustomValidity('Cannot start with space or special character');
     } else if (!/[\dA-Za-z,'\s]+$/.test(input.value)) {
       input.setCustomValidity(
@@ -77,19 +71,20 @@ const APP = (() => {
 
   const input = document.getElementById('search');
   input.addEventListener('input', validateQuery);
-  input.addEventListener('keydown', (e) => {
+  input.addEventListener('keydown', async (e) => {
     try {
       if (e.key === 'Enter') {
         if (!input.validity.valid) {
           input.reportValidity();
         } else {
-          const query = /^\d+$/.test(input.value)
+          const onlyDigits = /^\d+$/;
+          const query = onlyDigits.test(input.value)
             ? convertFromZIP(input.value)
             : input.value;
 
-          const searchWithLoading = loadingWrapper(search);
-          searchWithLoading(query);
           input.value = '';
+          const searchWithLoading = loadingWrapper(search);
+          await searchWithLoading(query);
         }
       }
     } catch (error) {
