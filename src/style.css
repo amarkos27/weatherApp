@@ -143,6 +143,15 @@ body {
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 1);
+    display: grid;
+    padding: 10px;
+    grid-template-rows: 1fr 3fr 1fr;
+    justify-items: center;
+    align-items: center;
+}
+
+.hourIcon {
+    width: 45px;
 }
 
 #ten-day {

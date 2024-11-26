@@ -105,8 +105,10 @@ const Display = (() => {
 
     if (time < 12) {
       converted = `${time} AM`;
+    } else if (time > 12) {
+      converted = `${time - 12} PM`;
     } else {
-      converted = `${time} PM`;
+      converted = '12 PM';
     }
 
     return converted;
@@ -118,19 +120,31 @@ const Display = (() => {
     const relevantHours = hourForecasts.slice(now, now + 6);
 
     hourlyConditions.hours.forEach((pane, index) => {
+      pane.innerHTML = '';
       const hour = relevantHours[index];
+      let timeString;
       let time, icon, temp;
 
       if (index === 0) {
-        time = 'Now';
+        timeString = 'Now';
       } else {
-        time = twelveHourFormat(hour);
+        timeString = twelveHourFormat(hour);
       }
 
       time = document.createElement('span');
       time.classList.add('time');
+      time.textContent = timeString;
 
-      icon = getImage(`./SVG/icons/${hour.icon}.svg`);
+      icon = document.createElement('img');
+      icon.classList.add('hourIcon');
+      icon.src = conditionIcons[`${hour.icon}.svg`];
+      icon.alt = hour.icon;
+
+      temp = document.createElement('span');
+      temp.classList.add('hourTemp');
+      temp.textContent = `${Math.floor(hour.temp)}°`;
+
+      pane.append(time, icon, temp);
     });
     console.log(hourForecasts);
   }
