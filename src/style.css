@@ -68,7 +68,7 @@ body {
 }
 
 .header, .loading {
-    transition: opacity 0.25s ease-in-out;
+    transition: opacity 0.15s ease-in-out;
 }
 
 .loading {
