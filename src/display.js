@@ -87,12 +87,14 @@ const Display = (() => {
     );
   }
 
-  function fillHeader(today, location) {
+  function fillHeader(now, today, location) {
     // Omit 'United States' from the location string if present
     const omitUS = /.*?(?=, United States|$)/.exec(location)[0];
 
     header.location.textContent = omitUS;
-    header.temp.innerHTML = `${Math.floor(today.temp)} <span>°</span>`;
+    header.temp.innerHTML = `${Math.floor(
+      today.hours[now].temp
+    )} <span>°</span>`;
     header.conditions.textContent = `${today.conditions}`;
     header.high.textContent = `H: ${Math.floor(today.tempmax)}°`;
     header.low.textContent = `L: ${Math.floor(today.tempmin)}°`;
@@ -114,8 +116,7 @@ const Display = (() => {
     return converted;
   }
 
-  function fillHourly(hourForecasts) {
-    const now = new Date().getHours();
+  function fillHourly(now, hourForecasts) {
     // Only show 6 hours at a time
     const relevantHours = hourForecasts.slice(now, now + 6);
 
@@ -150,10 +151,12 @@ const Display = (() => {
   }
 
   function fillMain(data) {
+    const now = new Date().getHours();
     const today = data.days[0];
     const location = data.resolvedAddress;
-    fillHeader(today, location);
-    fillHourly(today.hours);
+
+    fillHeader(now, today, location);
+    fillHourly(now, today.hours);
   }
 
   function listeners() {

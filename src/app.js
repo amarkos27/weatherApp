@@ -83,7 +83,7 @@ const APP = (() => {
 
           input.value = '';
           const searchWithLoading = loadingWrapper(search);
-          await searchWithLoading(query);
+          searchWithLoading(query);
         }
       }
     } catch (error) {
