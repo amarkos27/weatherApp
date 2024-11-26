@@ -89,6 +89,7 @@ const APP = (() => {
     } catch (error) {
       input.setCustomValidity(error.message);
       input.reportValidity();
+      console.error(error);
     }
   });
 })();

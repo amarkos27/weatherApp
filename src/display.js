@@ -20,6 +20,9 @@ const Display = (() => {
     humidity: document.querySelector('.humidity'),
   };
 
+  // Icons for hourly condition panes
+  let conditionIcons;
+
   // Container with six hour panes to show conditions
   const hourlyConditions = {
     container: document.querySelector('.hourly-conditions'),
@@ -37,9 +40,25 @@ const Display = (() => {
     chevron,
   };
 
+  function getImages(request) {
+    return new Promise((resolve) => {
+      try {
+        let images = {};
+        request.keys().forEach((key) => {
+          images[key.replace('./', '')] = request(key);
+        });
+
+        resolve(images);
+      } catch (error) {
+        console.error(error.message);
+      }
+    });
+  }
+
   async function loadingOn() {
     return new Promise((resolve) => {
       header.container.classList.add('hidden');
+      hourlyConditions.container.classList.add('hidden');
 
       header.container.addEventListener(
         'transitionend',
@@ -62,6 +81,7 @@ const Display = (() => {
       'transitionend',
       () => {
         header.container.classList.remove('hidden');
+        hourlyConditions.container.classList.remove('hidden');
       },
       { once: true }
     );
@@ -79,8 +99,40 @@ const Display = (() => {
     header.humidity.textContent = `Humidity: ${Math.floor(today.humidity)}%`;
   }
 
-  function fillHourly(hours) {
-    console.log(hours);
+  function twelveHourFormat(hour) {
+    const time = Number(hour.datetime.substring(0, 2));
+    let converted;
+
+    if (time < 12) {
+      converted = `${time} AM`;
+    } else {
+      converted = `${time} PM`;
+    }
+
+    return converted;
+  }
+
+  function fillHourly(hourForecasts) {
+    const now = new Date().getHours();
+    // Only show 6 hours at a time
+    const relevantHours = hourForecasts.slice(now, now + 6);
+
+    hourlyConditions.hours.forEach((pane, index) => {
+      const hour = relevantHours[index];
+      let time, icon, temp;
+
+      if (index === 0) {
+        time = 'Now';
+      } else {
+        time = twelveHourFormat(hour);
+      }
+
+      time = document.createElement('span');
+      time.classList.add('time');
+
+      icon = getImage(`./SVG/icons/${hour.icon}.svg`);
+    });
+    console.log(hourForecasts);
   }
 
   function fillMain(data) {
@@ -106,6 +158,13 @@ const Display = (() => {
 
   function init() {
     listeners();
+
+    // Import all icon images and cache them when the promise if fulfilled
+    getImages(require.context('./SVG/icons', false, /\.svg$/i)).then(
+      (response) => {
+        conditionIcons = response;
+      }
+    );
   }
 
   return {

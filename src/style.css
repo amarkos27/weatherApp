@@ -67,7 +67,7 @@ body {
     font-weight: 700;
 }
 
-.header, .loading {
+.header, .loading, .hourly-conditions {
     transition: opacity 0.15s ease-in-out;
 }
 
