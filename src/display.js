@@ -95,10 +95,12 @@ const Display = (() => {
     header.temp.innerHTML = `${Math.floor(
       today.hours[now].temp
     )} <span>°</span>`;
-    header.conditions.textContent = `${today.conditions}`;
+    header.conditions.textContent = `${today.hours[now].conditions}`;
     header.high.textContent = `H: ${Math.floor(today.tempmax)}°`;
     header.low.textContent = `L: ${Math.floor(today.tempmin)}°`;
-    header.humidity.textContent = `Humidity: ${Math.floor(today.humidity)}%`;
+    header.humidity.textContent = `Humidity: ${Math.floor(
+      today.hours[now].humidity
+    )}%`;
   }
 
   function twelveHourFormat(hour) {
@@ -124,15 +126,16 @@ const Display = (() => {
       pane.innerHTML = '';
       const hour = relevantHours[index];
       let timeString;
-      let time, icon, temp;
+      let icon, temp;
+      let time = document.createElement('span');
 
       if (index === 0) {
         timeString = 'Now';
+        time.classList.add('bold');
       } else {
         timeString = twelveHourFormat(hour);
       }
 
-      time = document.createElement('span');
       time.classList.add('time');
       time.textContent = timeString;
 

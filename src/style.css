@@ -19,6 +19,10 @@ body {
     overflow-x: hidden;
 }
 
+.bold {
+    font-weight: 700;
+}
+
 .content {
     width: 200vw;
     min-height: 100vh;
@@ -139,10 +143,10 @@ body {
     width: 110px;
     height: 130px;
     /* From https://css.glass */
-    background: rgba(255, 255, 255, 0.29);
+    background: rgba(255, 255, 255, 0.17);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     display: grid;
     padding: 10px;
     grid-template-rows: 1fr 3fr 1fr;
