@@ -24,14 +24,13 @@ const APP = (() => {
 
   async function search(query) {
     const weatherData = await getData(query);
-    console.log(weatherData);
     Display.fillMain(weatherData);
   }
 
   function loadingWrapper(func) {
     return async function (param) {
       try {
-        Display.loadingOn();
+        await Display.loadingOn();
         await func(param);
       } finally {
         Display.loadingOff();

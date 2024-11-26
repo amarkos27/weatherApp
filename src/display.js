@@ -37,14 +37,34 @@ const Display = (() => {
     chevron,
   };
 
-  function loadingOn() {
-    loading.classList.remove('hidden', 'out-of-flow');
-    header.container.classList.add('hidden', 'out-of-flow');
+  async function loadingOn() {
+    return new Promise((resolve) => {
+      header.container.classList.add('hidden');
+
+      header.container.addEventListener(
+        'transitionend',
+        () => {
+          loading.classList.remove('hidden');
+
+          loading.addEventListener('transitionend', () => resolve(), {
+            once: true,
+          });
+        },
+        { once: true }
+      );
+    });
   }
 
   function loadingOff() {
-    header.container.classList.remove('hidden', 'out-of-flow');
-    loading.classList.add('hidden', 'out-of-flow');
+    loading.classList.add('hidden');
+
+    loading.addEventListener(
+      'transitionend',
+      () => {
+        header.container.classList.remove('hidden');
+      },
+      { once: true }
+    );
   }
 
   function fillHeader(today, location) {
@@ -59,10 +79,15 @@ const Display = (() => {
     header.humidity.textContent = `Humidity: ${Math.floor(today.humidity)}%`;
   }
 
+  function fillHourly(hours) {
+    console.log(hours);
+  }
+
   function fillMain(data) {
     const today = data.days[0];
     const location = data.resolvedAddress;
     fillHeader(today, location);
+    fillHourly(today.hours);
   }
 
   function listeners() {

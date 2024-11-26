@@ -12,7 +12,6 @@
     user-select: none;
     font-family: 'Nunito';
     color: white;
-    transition: opacity .55s;
 }
 
 body {
@@ -42,6 +41,7 @@ body {
 
 /* HOME PAGE */
 .main {
+    position: relative;
     max-height: 100vh;
     padding: 25px;
     display: grid;
@@ -67,7 +67,13 @@ body {
     font-weight: 700;
 }
 
+.header, .loading {
+    transition: opacity 0.25s ease-in-out;
+}
+
 .loading {
+    position: absolute;
+    top: 90px;
     width: 75px;
     height: 75px;
     fill: white;
@@ -176,10 +182,7 @@ body {
 
 .hidden {
     opacity: 0;
-}
-
-.out-of-flow {
-    display: none;
+    pointer-events: none;
 }
 
 @media only screen and (max-width: 740px) {
