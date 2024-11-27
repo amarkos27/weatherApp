@@ -1,4 +1,5 @@
 import Icon from './images/chevron-down-svgrepo-com.svg';
+import moment from 'moment-timezone';
 
 const Display = (() => {
   const main = document.querySelector('.main');
@@ -155,7 +156,7 @@ const Display = (() => {
   }
 
   function fillMain(data) {
-    const now = new Date().getHours();
+    const now = moment.tz(new Date(), data.timezone).hour();
     const today = data.days[0];
     const location = data.resolvedAddress;
 
