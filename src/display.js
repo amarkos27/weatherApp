@@ -41,18 +41,12 @@ const Display = (() => {
   };
 
   function getImages(request) {
-    return new Promise((resolve) => {
-      try {
-        let images = {};
-        request.keys().forEach((key) => {
-          images[key.replace('./', '')] = request(key);
-        });
-
-        resolve(images);
-      } catch (error) {
-        console.error(error.message);
-      }
+    let images = {};
+    request.keys().forEach((key) => {
+      images[key.replace('./', '')] = request(key);
     });
+
+    return images;
   }
 
   async function loadingOn() {
@@ -87,6 +81,23 @@ const Display = (() => {
     );
   }
 
+  function twelveHourFormat(hour) {
+    const time = Number(hour.datetime.substring(0, 2));
+    let converted;
+
+    if (time === 0) {
+      converted = '12 AM';
+    } else if (time < 12) {
+      converted = `${time} AM`;
+    } else if (time > 12) {
+      converted = `${time - 12} PM`;
+    } else {
+      converted = '12 PM';
+    }
+
+    return converted;
+  }
+
   function fillHeader(now, today, location) {
     // Omit 'United States' from the location string if present
     const omitUS = /.*?(?=, United States|$)/.exec(location)[0];
@@ -103,27 +114,20 @@ const Display = (() => {
     )}%`;
   }
 
-  function twelveHourFormat(hour) {
-    const time = Number(hour.datetime.substring(0, 2));
-    let converted;
-
-    if (time < 12) {
-      converted = `${time} AM`;
-    } else if (time > 12) {
-      converted = `${time - 12} PM`;
-    } else {
-      converted = '12 PM';
-    }
-
-    return converted;
-  }
-
-  function fillHourly(now, hourForecasts) {
+  function fillHourly(now, data) {
     // Only show 6 hours at a time
-    const relevantHours = hourForecasts.slice(now, now + 6);
+    let i = 0;
+    const relevantHours = data.days[0].hours.slice(now, now + 6);
+
+    // Pull hours from tomorrow's forecast if reaching the end of today's hours
+    while (relevantHours.length < 6) {
+      relevantHours.push(data.days[1].hours[i]);
+      i++;
+    }
 
     hourlyConditions.hours.forEach((pane, index) => {
       pane.innerHTML = '';
+
       const hour = relevantHours[index];
       let timeString;
       let icon, temp;
@@ -150,7 +154,6 @@ const Display = (() => {
 
       pane.append(time, icon, temp);
     });
-    console.log(hourForecasts);
   }
 
   function fillMain(data) {
@@ -159,7 +162,7 @@ const Display = (() => {
     const location = data.resolvedAddress;
 
     fillHeader(now, today, location);
-    fillHourly(now, today.hours);
+    fillHourly(now, data);
   }
 
   function listeners() {
@@ -179,11 +182,9 @@ const Display = (() => {
   function init() {
     listeners();
 
-    // Import all icon images and cache them when the promise if fulfilled
-    getImages(require.context('./SVG/icons', false, /\.svg$/i)).then(
-      (response) => {
-        conditionIcons = response;
-      }
+    // Import all icon images and cache them
+    conditionIcons = getImages(
+      require.context('./SVG/icons', false, /\.svg$/i)
     );
   }
 

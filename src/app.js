@@ -29,12 +29,9 @@ const APP = (() => {
 
   function loadingWrapper(func) {
     return async function (param) {
-      try {
-        await Display.loadingOn();
-        await func(param);
-      } finally {
-        Display.loadingOff();
-      }
+      await Display.loadingOn();
+      await func(param);
+      Display.loadingOff();
     };
   }
 
@@ -83,7 +80,7 @@ const APP = (() => {
 
           input.value = '';
           const searchWithLoading = loadingWrapper(search);
-          searchWithLoading(query);
+          await searchWithLoading(query);
         }
       }
     } catch (error) {
@@ -92,4 +89,10 @@ const APP = (() => {
       console.error(error);
     }
   });
+
+  async function init() {}
+
+  return { init };
 })();
+
+APP.init();
