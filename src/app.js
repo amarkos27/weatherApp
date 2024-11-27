@@ -29,9 +29,12 @@ const APP = (() => {
 
   function loadingWrapper(func) {
     return async function (param) {
-      await Display.loadingOn();
-      await func(param);
-      Display.loadingOff();
+      try {
+        await Display.loadingOn();
+        await func(param);
+      } finally {
+        Display.loadingOff();
+      }
     };
   }
 
@@ -65,6 +68,8 @@ const APP = (() => {
     return input.validity.valid;
   }
 
+  const searchWithLoading = loadingWrapper(search);
+
   const input = document.getElementById('search');
   input.addEventListener('input', validateQuery);
   input.addEventListener('keydown', async (e) => {
@@ -79,7 +84,6 @@ const APP = (() => {
             : input.value;
 
           input.value = '';
-          const searchWithLoading = loadingWrapper(search);
           await searchWithLoading(query);
         }
       }
@@ -90,7 +94,9 @@ const APP = (() => {
     }
   });
 
-  async function init() {}
+  async function init() {
+    searchWithLoading('New York');
+  }
 
   return { init };
 })();
