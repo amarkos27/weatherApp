@@ -103,9 +103,7 @@ const Display = (() => {
     const omitUS = /.*?(?=, United States|$)/.exec(location)[0];
 
     header.location.textContent = omitUS;
-    header.temp.innerHTML = `${Math.floor(
-      today.hours[now].temp
-    )} <span>°</span>`;
+    header.temp.innerHTML = `${Math.floor(today.hours[now].temp)}°`;
     header.conditions.textContent = `${today.hours[now].conditions}`;
     header.high.textContent = `H: ${Math.floor(today.tempmax)}°`;
     header.low.textContent = `L: ${Math.floor(today.tempmin)}°`;

@@ -104,15 +104,9 @@ body {
 }
 
 .temp {
-    position: relative;
     width: fit-content;
     height: 100%;
     font-size: 90px;
-}
-
-.temp span {
-    position: absolute;
-    right: -30px;
 }
 
 .conditions {
