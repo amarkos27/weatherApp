@@ -100,7 +100,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    white-space: nowrap;
+    /* white-space: nowrap; */
 }
 
 .temp {
