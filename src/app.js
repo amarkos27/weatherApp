@@ -94,6 +94,12 @@ const APP = (() => {
     }
   });
 
+  const tenDayButton = document.getElementById('ten-day');
+  const backToMain = document.getElementById('return');
+
+  tenDayButton.addEventListener('click', Display.switchPage);
+  backToMain.addEventListener('click', Display.switchPage);
+
   async function init() {
     searchWithLoading('New York');
   }

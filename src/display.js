@@ -2,7 +2,7 @@ import Icon from './images/chevron-down-svgrepo-com.svg';
 import moment from 'moment-timezone';
 
 const Display = (() => {
-  const main = document.querySelector('.main');
+  const content = document.querySelector('.content');
 
   // 10 day forecast page
   const forecast = document.querySelector('.forecast');
@@ -178,6 +178,10 @@ const Display = (() => {
     });
   }
 
+  function switchPage() {
+    content.classList.toggle('pageTwo');
+  }
+
   function init() {
     listeners();
 
@@ -192,6 +196,7 @@ const Display = (() => {
     loadingOn,
     loadingOff,
     fillMain,
+    switchPage,
   };
 })();
 
