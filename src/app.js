@@ -11,7 +11,7 @@ const APP = (() => {
 
   async function getData(query) {
     const response = await fetch(
-      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${query}?key=${KEY}&include=hours`
+      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${query}?key=${KEY}&include=hours&lang=en`
     );
 
     if (response.status === 200) {
@@ -23,8 +23,15 @@ const APP = (() => {
   }
 
   async function search(query) {
-    const weatherData = await getData(query);
-    Display.fillMain(weatherData);
+    try {
+      const weatherData = await getData(query);
+      // const formattedAddress = await formatAddress(query);
+      Display.fillMain(weatherData);
+    } catch (error) {
+      input.setCustomValidity(error.message);
+      input.reportValidity();
+      console.error(error);
+    }
   }
 
   function loadingWrapper(func) {
@@ -73,24 +80,18 @@ const APP = (() => {
   const input = document.getElementById('search');
   input.addEventListener('input', validateQuery);
   input.addEventListener('keydown', async (e) => {
-    try {
-      if (e.key === 'Enter') {
-        if (!input.validity.valid) {
-          input.reportValidity();
-        } else {
-          const onlyDigits = /^\d+$/;
-          const query = onlyDigits.test(input.value)
-            ? convertFromZIP(input.value)
-            : input.value;
+    if (e.key === 'Enter') {
+      if (!input.validity.valid) {
+        input.reportValidity();
+      } else {
+        const onlyDigits = /^\d+$/;
+        const query = onlyDigits.test(input.value)
+          ? convertFromZIP(input.value)
+          : input.value;
 
-          input.value = '';
-          await searchWithLoading(query);
-        }
+        input.value = '';
+        await searchWithLoading(query);
       }
-    } catch (error) {
-      input.setCustomValidity(error.message);
-      input.reportValidity();
-      console.error(error);
     }
   });
 
