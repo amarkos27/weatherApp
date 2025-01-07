@@ -22,11 +22,46 @@ const APP = (() => {
     }
   }
 
+  async function formatAddress(query) {
+    const KEY = '4b822f3e59d44b2b843ea491fdbe3d49';
+    const response = await fetch(
+      `https://api.geoapify.com/v1/geocode/autocomplete?text=${query}&format=json&apiKey=${KEY}`
+    );
+
+    const data = await response.json();
+
+    if (data.results.length) {
+      const topHit = data.results[0];
+      let formatted;
+
+      if (topHit.country_code === 'us') {
+        if (topHit.city) {
+          formatted = `${topHit.city}, ${topHit.state_code}`;
+        } else {
+          formatted = topHit.state;
+        }
+      } else {
+        if (topHit.city) {
+          formatted = `${topHit.city}, ${topHit.country}`;
+        } else if (topHit.state) {
+          formatted = `${topHit.state}, ${topHit.country}`;
+        } else {
+          formatted = topHit.country;
+        }
+      }
+
+      return formatted;
+    } else {
+      throw new Error('Not found');
+    }
+  }
+
   async function search(query) {
     try {
-      const weatherData = await getData(query);
-      // const formattedAddress = await formatAddress(query);
-      Display.fillMain(weatherData);
+      let formattedAddress = await formatAddress(query);
+      const weatherData = await getData(formattedAddress);
+
+      Display.fillMain(formattedAddress, weatherData);
     } catch (error) {
       input.setCustomValidity(error.message);
       input.reportValidity();

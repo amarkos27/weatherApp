@@ -155,10 +155,10 @@ const Display = (() => {
     });
   }
 
-  function fillMain(data) {
+  function fillMain(formattedAddress, data) {
     const now = moment.tz(new Date(), data.timezone).hour();
     const today = data.days[0];
-    const location = data.resolvedAddress;
+    const location = formattedAddress;
 
     fillHeader(now, today, location);
     fillHourly(now, data);
