@@ -35,7 +35,9 @@ const APP = (() => {
       let formatted;
 
       if (topHit.country_code === 'us') {
-        if (topHit.city) {
+        if (topHit.district) {
+          formatted = `${topHit.district}, ${topHit.city}`;
+        } else if (topHit.city) {
           formatted = `${topHit.city}, ${topHit.state_code}`;
         } else {
           formatted = topHit.state;
