@@ -179,7 +179,16 @@ const Display = (() => {
   }
 
   function switchPage() {
+    content.classList.add('swap-transition');
     content.classList.toggle('pageTwo');
+
+    content.addEventListener(
+      'transitionend',
+      () => {
+        content.classList.remove('swap-transition');
+      },
+      { once: true }
+    );
   }
 
   function init() {
