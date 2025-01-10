@@ -64,6 +64,7 @@ const APP = (() => {
       const weatherData = await getData(formattedAddress);
 
       Display.fillMain(formattedAddress, weatherData);
+      Display.fillForecast(weatherData);
     } catch (error) {
       input.setCustomValidity(error.message);
       input.reportValidity();

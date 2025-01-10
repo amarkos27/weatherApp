@@ -1,11 +1,9 @@
 import Icon from './images/chevron-down-svgrepo-com.svg';
 import moment from 'moment-timezone';
+import { format } from 'date-fns';
 
 const Display = (() => {
   const content = document.querySelector('.content');
-
-  // 10 day forecast page
-  const forecast = document.querySelector('.forecast');
 
   // Loading icon
   const loading = document.querySelector('.loading');
@@ -40,6 +38,8 @@ const Display = (() => {
     button: document.getElementById('ten-day'),
     chevron,
   };
+
+  const tenDays = document.querySelectorAll('.day');
 
   function getImages(request) {
     let images = {};
@@ -143,7 +143,7 @@ const Display = (() => {
       time.textContent = timeString;
 
       icon = document.createElement('img');
-      icon.classList.add('hourIcon');
+      icon.classList.add('icon');
       icon.src = conditionIcons[`${hour.icon}.svg`];
       icon.alt = hour.icon;
 
@@ -162,6 +162,56 @@ const Display = (() => {
 
     fillHeader(now, today, location);
     fillHourly(now, data);
+  }
+
+  function fillForecast(weatherData) {
+    tenDays.forEach((dayPane, index) => {
+      dayPane.innerHTML = '';
+
+      const dayForecast = weatherData.days[index];
+      fillDay(dayPane, dayForecast, index);
+    });
+  }
+
+  function fillDay(dayPane, dayForecast, index) {
+    // console.log(dayForecast);
+    let dateString;
+    const date = document.createElement('span');
+    date.classList.add('forecast-humidity');
+
+    if (index === 0) {
+      dateString = 'Today';
+      date.classList.add('bold');
+    } else {
+      const dateComponents = dayForecast.datetime.split('-');
+      const year = dateComponents[0];
+      const month = Number(dateComponents[1]) - 1;
+      const day = dateComponents[2];
+
+      dateString = format(new Date(year, month, day), 'M/dd');
+    }
+    date.textContent = dateString;
+
+    const iconWrapper = document.createElement('div');
+    const icon = document.createElement('img');
+    icon.classList.add('icon');
+    icon.src = conditionIcons[`${dayForecast.icon}.svg`];
+    icon.alt = dayForecast.icon;
+    iconWrapper.append(icon);
+
+    const high = document.createElement('span');
+    high.classList.add('forecast-high');
+    high.textContent = `High: ${Math.floor(dayForecast.tempmax)}°`;
+
+    const low = document.createElement('span');
+    low.classList.add('forecast-low');
+    low.textContent = `Low: ${Math.floor(dayForecast.tempmin)}°`;
+
+    const humidity = document.createElement('span');
+    humidity.classList.add('forecast-humidity');
+    humidity.textContent = `Humidity: ${Math.floor(dayForecast.humidity)}%`;
+
+    dayPane.append(date, iconWrapper, high, low, humidity);
   }
 
   function listeners() {
@@ -186,6 +236,10 @@ const Display = (() => {
       'transitionend',
       () => {
         content.classList.remove('swap-transition');
+
+        if (content.classList.contains('pageTwo')) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       },
       { once: true }
     );
@@ -205,6 +259,7 @@ const Display = (() => {
     loadingOn,
     loadingOff,
     fillMain,
+    fillForecast,
     switchPage,
   };
 })();
