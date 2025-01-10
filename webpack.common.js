@@ -1,9 +1,12 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: './src/app.js',
+  entry: {
+    app: './src/app.js',
+  },
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
@@ -15,8 +18,12 @@ module.exports = {
       title: 'Weather',
     }),
     new MiniCssExtractPlugin({
-      filename: 'style.css',
+      filename: '[name].css',
     }),
+    new webpack.ContextReplacementPlugin(
+      /date-fns[/\\]locale/,
+      new RegExp(`(${locales.join('|')})\.js$`)
+    ),
   ],
   module: {
     rules: [
