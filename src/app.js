@@ -140,7 +140,25 @@ const APP = (() => {
   backToMain.addEventListener('click', Display.switchPage);
 
   async function init() {
-    searchWithLoading('New York');
+    try {
+      // Show the user their location forecast if their IP is available, else just show New York
+
+      const KEY = '4b822f3e59d44b2b843ea491fdbe3d49';
+      const response = await fetch(
+        `https://api.geoapify.com/v1/ipinfo?apiKey=${KEY}`
+      );
+      const currentLocation = await response.json();
+
+      if (response.ok) {
+        searchWithLoading(
+          `${currentLocation.city?.name}, ${
+            currentLocation.state?.name || currentLocation.country?.name
+          }`
+        );
+      }
+    } catch {
+      searchWithLoading('New York');
+    }
   }
 
   return { init };
